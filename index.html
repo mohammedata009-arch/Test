@@ -3,116 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تمرين التحليل الاستراتيجي التفاعلي</title>
+    <title>تحدي المحلل الاستراتيجي | SWOT & PESTEL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --success: #27ae60;
-            --bg: #f4f7f6;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --text: #2b2d42;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--primary); margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1, h2 { text-align: center; color: var(--primary); }
-        .case-study { background: #eef2f3; padding: 20px; border-right: 5px solid var(--accent); margin-bottom: 30px; border-radius: 5px; }
-        .exercise-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .items-box { border: 2px dashed #bdc3c7; padding: 15px; border-radius: 10px; min-height: 200px; }
-        .draggable { background: white; border: 1px solid #ddd; padding: 10px; margin: 8px 0; cursor: grab; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); transition: 0.3s; }
-        .draggable:hover { background: #f0f0f0; }
-        .drop-zone { background: #f9f9f9; border: 2px solid var(--accent); padding: 15px; border-radius: 10px; min-height: 100px; margin-bottom: 10px; }
-        .drop-zone h3 { margin-top: 0; font-size: 1rem; color: var(--accent); }
-        button { display: block; width: 100%; padding: 15px; background: var(--success); color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
-        button:hover { background: #219150; }
-        #result { margin-top: 20px; font-weight: bold; text-align: center; font-size: 1.2rem; }
-        .feedback { font-size: 0.9rem; color: #666; margin-top: 10px; display: none; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header { margin-bottom: 30px; }
+        .score-board { font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        #progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            transition: width 0.3s ease;
+        }
+
+        .case-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-right: 8px solid var(--primary);
+            margin-bottom: 25px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        #final-screen { display: none; }
+        .restart-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>تمرين تفاعلي: SWOT & PESTEL</h1>
-    
-    <div class="case-study">
-        <h3>الحالة التطبيقية: شركة "نور" للطاقة المتجددة</h3>
-        <p>شركة ناشئة تهدف لتوفير ألواح شمسية ذكية. تواجه الشركة: قوانين حكومية داعمة للبيئة، نقص في السيولة النقدية، ارتفاع تكلفة المواد الخام عالمياً، وامتلاكها براءة اختراع لتقنية تخزين طاقة مبتكرة.</p>
-    </div>
-
-    <div class="exercise-section">
-        <div>
-            <h3>العوامل (اسحب العنصر للمكان الصحيح):</h3>
-            <div id="items" class="items-box">
-                <div class="draggable" draggable="true" id="item1" data-type="PESTEL">قوانين حماية البيئة الجديدة</div>
-                <div class="draggable" draggable="true" id="item2" data-type="SWOT-S">براءة اختراع حصرية</div>
-                <div class="draggable" draggable="true" id="item3" data-type="SWOT-W">ضعف رأس المال الحالي</div>
-                <div class="draggable" draggable="true" id="item4" data-type="PESTEL">تضخم أسعار الشحن عالمياً</div>
-            </div>
+<div class="game-container animate__animated animate__fadeIn">
+    <div id="game-ui">
+        <div class="header">
+            <h1>🏆 تحدي التحليل الاستراتيجي</h1>
+            <div class="score-board">النقاط: <span id="score">0</span></div>
+            <div class="progress-bar"><div id="progress"></div></div>
+            <p>صنّف العبارة التالية في الإطار الصحيح:</p>
         </div>
 
-        <div>
-            <div class="drop-zone" id="pestel-zone" data-target="PESTEL">
-                <h3>إطار PESTEL (عوامل خارجية)</h3>
+        <div id="case-display" class="case-card animate__animated animate__fadeIn">
             </div>
-            <div class="drop-zone" id="swot-zone" data-target="SWOT">
-                <h3>إطار SWOT (نقاط داخلية)</h3>
-            </div>
+
+        <div class="options-grid">
+            <button class="option-btn" onclick="checkAnswer('SWOT-S')">نقطة قوة (SWOT-S)</button>
+            <button class="option-btn" onclick="checkAnswer('SWOT-W')">نقطة ضعف (SWOT-W)</button>
+            <button class="option-btn" onclick="checkAnswer('PESTEL-E')">عامل اقتصادي (PESTEL)</button>
+            <button class="option-btn" onclick="checkAnswer('PESTEL-T')">عامل تقني (PESTEL)</button>
         </div>
     </div>
 
-    <button onclick="checkResult()">تحقق من الإجابة</button>
-    <div id="result"></div>
-    <div id="solution" class="feedback">
-        <strong>الحل الصحيح:</strong> <br>
-        - PESTEL: قوانين البيئة (سياسي/قانوني)، تضخم الأسعار (اقتصادي). <br>
-        - SWOT: براءة الاختراع (نقطة قوة S)، ضعف السيولة (نقطة ضعف W).
+    <div id="final-screen" class="animate__animated animate__zoomIn">
+        <h2>🎉 انتهى التحدي!</h2>
+        <p id="final-score-text"></p>
+        <button class="restart-btn" onclick="location.reload()">إعادة المحاولة</button>
     </div>
 </div>
 
 <script>
-    const draggables = document.querySelectorAll('.draggable');
-    const containers = document.querySelectorAll('.drop-zone');
+    const questions = [
+        { text: "تمتلك الشركة براءة اختراع لمحرك يعمل بالهيدروجين لمدة 20 عاماً.", correct: "SWOT-S" },
+        { text: "ارتفاع معدلات الفائدة في البنوك مما يزيد تكلفة القروض الاستثمارية.", correct: "PESTEL-E" },
+        { text: "الشركة تعاني من دوران وظيفي عالٍ واستقالات متكررة في قسم الإدارة.", correct: "SWOT-W" },
+        { text: "ظهور تقنيات الذكاء الاصطناعي التي قد تجعل منتج الشركة الحالي قديماً.", correct: "PESTEL-T" },
+        { text: "توفر قاعدة بيانات ضخمة لعملاء مخلصين للعلامة التجارية منذ سنوات.", correct: "SWOT-S" }
+    ];
 
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', () => {
-            draggable.classList.add('dragging');
-        });
+    let currentStep = 0;
+    let score = 0;
 
-        draggable.addEventListener('dragend', () => {
-            draggable.classList.remove('dragging');
-        });
-    });
-
-    containers.forEach(container => {
-        container.addEventListener('dragover', e => {
-            e.preventDefault();
-            const draggable = document.querySelector('.dragging');
-            container.appendChild(draggable);
-        });
-    });
-
-    function checkResult() {
-        const pestelZone = document.getElementById('pestel-zone');
-        const swotZone = document.getElementById('swot-zone');
-        let correct = 0;
-        let total = 4;
-
-        pestelZone.querySelectorAll('.draggable').forEach(item => {
-            if(item.getAttribute('data-type') === 'PESTEL') correct++;
-        });
-
-        swotZone.querySelectorAll('.draggable').forEach(item => {
-            if(item.getAttribute('data-type').startsWith('SWOT')) correct++;
-        });
-
-        const resultDiv = document.getElementById('result');
-        if(correct === total) {
-            resultDiv.innerHTML = "عمل رائع! " + correct + "/" + total + " إجابات صحيحة.";
-            resultDiv.style.color = "green";
+    function loadQuestion() {
+        if (currentStep < questions.length) {
+            const q = questions[currentStep];
+            const display = document.getElementById('case-display');
+            display.innerText = q.text;
+            display.classList.remove('animate__fadeIn');
+            void display.offsetWidth; // Trigger reflow
+            display.classList.add('animate__fadeIn');
+            
+            document.getElementById('progress').style.width = (currentStep / questions.length * 100) + "%";
         } else {
-            resultDiv.innerHTML = "هناك بعض الأخطاء. حصلت على " + correct + "/" + total;
-            resultDiv.style.color = "red";
+            showFinalResults();
         }
-        document.getElementById('solution').style.display = "block";
     }
+
+    function checkAnswer(answer) {
+        const correct = questions[currentStep].correct;
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        if (answer === correct) {
+            score += 20;
+            document.getElementById('score').innerText = score;
+        }
+
+        currentStep++;
+        setTimeout(loadQuestion, 500);
+    }
+
+    function showFinalResults() {
+        document.getElementById('game-ui').style.display = 'none';
+        document.getElementById('final-screen').style.display = 'block';
+        document.getElementById('final-score-text').innerText = `لقد حصلت على ${score} من 100 نقطة!`;
+    }
+
+    // تشغيل السؤال الأول عند التحميل
+    loadQuestion();
 </script>
 
 </body>
