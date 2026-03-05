@@ -2,30 +2,30 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اختبار إدارة الاجتماعات - إعداد محمد طه</title>
+    <title>اختبار التفكير التصميمي - إعداد محمد طه</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #e67e22;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --gold: #f1c40f;
-            --light: #f8f9fa;
+            --primary: #0f172a;
+            --secondary: #d4af37; /* ذهبي */
+            --success: #10b981;
+            --danger: #ef4444;
+            --accent: #3b82f6;
+            --light: #f8fafc;
         }
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background: linear-gradient(-45deg, #2c3e50, #34495e, #e67e22, #d35400);
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #d4af37, #926d00);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
             min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; padding: 15px; 
         }
         @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
         
-        .quiz-container { background: white; width: 100%; max-width: 650px; padding: 40px; border-radius: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); position: relative; }
+        .quiz-container { background: white; width: 100%; max-width: 650px; padding: 40px; border-radius: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); position: relative; user-select: none; }
         
         .badge { 
             position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            background: var(--gold); color: #000; padding: 5px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9em; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: var(--secondary); color: #000; padding: 5px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9em; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             display: none;
         }
 
@@ -35,82 +35,105 @@
         .progress-bar { height: 12px; background: #eee; border-radius: 6px; margin-bottom: 25px; overflow: hidden; }
         #progress { height: 100%; background: linear-gradient(to left, var(--secondary), var(--success)); width: 0%; transition: 0.5s; }
         
-        .question { font-size: 1.3em; font-weight: bold; color: #2d3436; margin-bottom: 25px; line-height: 1.6; }
+        .question { font-size: 1.25em; font-weight: bold; color: #1e293b; margin-bottom: 25px; line-height: 1.6; }
         
         .options { display: grid; gap: 12px; }
         .option-btn { 
-            padding: 15px; border: 2px solid #edeff2; background: var(--light); border-radius: 12px; 
-            cursor: pointer; font-size: 1.05em; transition: 0.3s; text-align: right; font-weight: 500;
+            padding: 15px; border: 2px solid #f1f5f9; background: var(--light); border-radius: 12px; 
+            cursor: pointer; font-size: 1.05em; transition: 0.3s; text-align: right; font-weight: 500; color: #334155;
         }
-        .option-btn:hover { border-color: var(--secondary); background: #fff3e0; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .option-btn:hover { border-color: var(--secondary); background: #fefce8; transform: translateY(-2px); }
         
         .feedback-box { margin-top: 25px; padding: 20px; border-radius: 15px; display: none; font-weight: bold; line-height: 1.5; border: 2px solid; animation: slideUp 0.4s; }
         @keyframes slideUp { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
         
-        .correct { background: #e8f5e9; border-color: var(--success); color: #2e7d32; }
-        .wrong { background: #fff3e0; border-color: var(--danger); color: #c62828; }
+        .correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
+        .wrong { background: #fff1f2; border-color: var(--danger); color: #991b1b; }
         
-        #next-btn, #whatsapp-btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-        #next-btn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4); }
+        #next-btn, #whatsapp-btn, #start-btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        #next-btn { background: var(--primary); color: white; }
+        #start-btn { background: var(--secondary); color: #000; }
         #whatsapp-btn { background: #25D366; color: white; display: none; }
         
+        #activation-screen { text-align: center; }
         #result-area { display: none; text-align: center; }
+        input { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 2px solid #ddd; text-align: center; font-size: 1.1em; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
 <audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
 <div class="quiz-container">
-    <div id="tie-breaker-badge" class="badge">🔥 سيناريو كسر التعادل للخبراء</div>
-    <h1>إدارة الاجتماعات الفعالة</h1>
-    <div class="subtitle">البرنامج المتكامل - إعداد محمد طه عطا المنان 🎓</div>
-    <div class="progress-bar"><div id="progress"></div></div>
+    <div id="tie-breaker-badge" class="badge">🔥 تحدي خبراء التسويق والإدارة</div>
+    
+    <div id="activation-screen">
+        <h1>التفكير التصميمي للابتكار</h1>
+        <div class="subtitle">ماجستير الإدارة المصغر - محمد طه عطا المنان 🎓</div>
+        <p>أيها المتدربون، يرجى إدخال رمز التفعيل (1998):</p>
+        <input type="password" id="pass-input" placeholder="****">
+        <button id="start-btn" onclick="checkActivation()">دخول الاختبار 🔓</button>
+    </div>
 
-    <div id="quiz-body">
+    <div id="quiz-body" style="display: none;">
+        <h1>التفكير التصميمي للابتكار</h1>
+        <div class="subtitle">محاكاة المواقع الإدارية - إعداد محمد طه 🎓</div>
+        <div class="progress-bar"><div id="progress"></div></div>
         <div class="question" id="q-text"></div>
         <div class="options" id="q-options"></div>
         <div id="feedback" class="feedback-box"></div>
-        <button id="next-btn" style="display:none;">التالي ⮕</button>
+        <button id="next-btn" style="display:none;">الخطوة التالية ⮕</button>
     </div>
 
     <div id="result-area">
-        <h2 style="font-size: 2.2em; color: var(--primary);">أداء متميز! 🎉</h2>
+        <h2 style="font-size: 2.2em; color: var(--primary);">إنجاز رائع! 🏆</h2>
         <div id="final-score" style="font-size: 1.8em; margin: 20px 0; font-weight: bold; color: var(--success);"></div>
-        <p style="font-size: 1.1em; color: #555;">أيها المتدربون، لقد أثبتم كفاءتكم في إدارة المواقف الإدارية الصعبة. أرسلوا نتيجتكم الآن.</p>
+        <p style="font-size: 1.1em; color: #555;">أيها المتدربون، لقد أظهرتم فهماً عميقاً لعقلية المصمم في الإدارة والتسويق.</p>
         <button id="whatsapp-btn">إرسال النتيجة للأستاذ محمد طه ✅</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "بدأ الاجتماع وتأخر مدير القسم 10 دقائق، ما هو التصرف الصحيح كقائد؟", options: ["انتظاره لبدء الاجتماع", "البدء فوراً في الموعد", "تأجيل الاجتماع"], correct: 1, explain: "البدء في الموعد يحترم وقت الحاضرين ويؤكد على ثقافة الانضباط." },
-        { q: "أثناء النقاش، خرج أحد المتدربين عن الموضوع وبدأ يتحدث عن مشكلة فنية بالمكتب. ما الحل؟", options: ["السماح له لإبداء الاهتمام", "استخدام 'ركن الأفكار' وتدوينها", "مقاطعته بحدة"], correct: 1, explain: "ركن الأفكار (Parking Lot) يحافظ على مسار الاجتماع دون تجاهل الملاحظات." },
-        { q: "أحد الأعضاء يسيطر على الحديث ولا يترك فرصة للبقية. بصفتكم مدراء، ماذا تفعلون؟", options: ["مقابلته بعد الاجتماع", "تحديد وقت (2 دقيقة) لكل متحدث", "تجاهل رأيه تماماً"], correct: 1, explain: "توزيع الوقت العادل يضمن سماع كافة وجهات النظر وتجنب الهيمنة." },
-        { q: "ما هو العنصر الأهم لضمان تنفيذ مخرجات الاجتماع؟", options: ["طول مدة النقاش", "مصفوفة متابعة (من، ماذا، متى)", "توفير وجبة غداء"], correct: 1, explain: "بدون مصفوفة متابعة واضحة، تظل القرارات مجرد وعود غير منفذة." },
-        { q: "تلقيتم دعوة لاجتماع دون 'أجندة' واضحة. ما هو الإجراء الاحترافي؟", options: ["الحضور فقط", "الاعتذار أو طلب الأجندة أولاً", "الحضور وانتقاد المنظم"], correct: 1, explain: "الاجتماع بدون أجندة هو هدر للوقت وتشتيت للموارد الإدارية." },
-        { q: "في منتصف الاجتماع، حدث خلاف حاد بين عضوين. كيف يتصرف القائد؟", options: ["تجاهل الخلاف والمضي قدماً", "إيقاف النقاش فوراً والتركيز على الحل", "تشجيع الخلاف لمعرفة الحقيقة"], correct: 1, explain: "إدارة النزاع تتطلب توجيه الطاقة نحو 'حل المشكلة' لا 'مهاجمة الأشخاص'." },
-        { q: "متى نعتبر أن البريد الإلكتروني أفضل من عقد اجتماع؟", options: ["عند الرغبة في العصف الذهني", "عندما يكون الغرض إيصال معلومة فقط", "عند وجود قرار معقد"], correct: 1, explain: "تبادل المعلومات لا يتطلب اجتماعاً، بل يكفيه بريد إلكتروني موثق." },
-        { q: "متى يجب إرسال 'محضر الاجتماع' لضمان الفاعلية؟", options: ["بعد أسبوع", "خلال 24 إلى 48 ساعة", "قبل الاجتماع القادم"], correct: 1, explain: "الإرسال السريع يحافظ على زخم الأفكار ويسرع عملية التنفيذ." },
-        { q: "ماذا تفعل مع العضو الذي يعترض دائماً 'لأجل الاعتراض'؟", options: ["مطالبته ببديل عملي لكل اعتراض", "إسكاته أمام الجميع", "الموافقة على رأيه دائماً"], correct: 0, explain: "مطالبة المعارض ببدائل عملية يحوله من نقد سلبي إلى تفكير بناء." },
-        { q: "أفضل طريقة لإنهاء الاجتماع هي:", options: ["المغادرة فوراً", "تلخيص القرارات وقائمة المهام", "تحديد موعد الاجتماع القادم فقط"], correct: 1, explain: "التلخيص يضمن خروج الجميع بفهم موحد لما تم الاتفاق عليه." },
+        { q: "انخفضت مبيعات منتجكم الجديد فجأة. ما هو أول إجراء من منظور التفكير التصميمي؟", options: ["تغيير خطة الإعلانات فوراً", "النزول للميدان ومراقبة العميل أثناء استخدام المنتج", "تخفيض السعر بنسبة 20%"], correct: 1, explain: "البداية دائماً من 'التعاطف' لفهم السبب الحقيقي خلف سلوك العميل." },
+        { q: "في مرحلة 'التحديد' (Define)، ما هي الصيغة الأنسب لتعريف التحدي؟", options: ["نحتاج لزيادة الأرباح هذا الشهر", "كيف يمكننا جعل رحلة تسوق الموظفين أسرع وأقل جهداً؟", "يجب توظيف مسوقين جدد"], correct: 1, explain: "الصيغة الصحيحة يجب أن تتمحور حول احتياج العميل لا أهداف الشركة فقط." },
+        { q: "أثناء جلسة عصف ذهني، قدم أحد المتدربين فكرة مكلفة جداً. كيف تتعاملون؟", options: ["رفضها لعدم توفر الميزانية", "قبولها وتدوينها للبناء عليها", "السخرية منها لتوفير الوقت"], correct: 1, explain: "في مرحلة Ideate، الكم يولد الكيف، ولا مجال للنقد أو التقييم المسبق." },
+        { q: "لماذا نستخدم النماذج الأولية (Prototype) البسيطة والورقية؟", options: ["لأن ميزانية القسم ضعيفة", "للفشل بسرعة وبأقل تكلفة وتصحيح المسار", "لإبهار العميل بالرسم اليدوي"], correct: 1, explain: "الهدف هو التعلم السريع وليس المنتج النهائي." },
+        { q: "متى نعود من مرحلة 'الاختبار' إلى مرحلة 'التعاطف'؟", options: ["إذا نجح الاختبار تماماً", "إذا اكتشفنا أننا لم نفهم احتياج العميل الحقيقي", "لا نعود أبداً للخلف"], correct: 1, explain: "التفكير التصميمي عملية تكرارية تعتمد على التغذية الراجعة." },
+        { q: "ما هو الـ MVP في عالم التسويق والإدارة؟", options: ["أكثر موظف مبيعات قيمة", "المنتج الأدنى القابل للتجربة والتعلم", "خطة العمل السنوية"], correct: 1, explain: "الـ MVP هو أقل نسخة من المنتج تسمح بجمع أكبر قدر من التعلم عن العملاء." },
+        { q: "أي من هذه الأدوات يستخدم في مرحلة 'التعاطف'؟", options: ["خريطة رحلة العميل (Customer Journey Map)", "جدول الميزانية العمومية", "الهيكل التنظيمي للشركة"], correct: 0, explain: "خريطة الرحلة تساعدنا على تتبع آلام العميل في كل نقطة تواصل." },
+        { q: "عند اختبار النموذج مع العميل، ما هو الدور الأهم للمصمم؟", options: ["شرح مميزات المنتج والدفاع عنه", "الصمت، المراقبة، وتدوين الملاحظات", "إقناع العميل بالشراء فوراً"], correct: 1, explain: "الاختبار يهدف للتعلم من رد فعل العميل العفوي، وليس البيع." },
+        { q: "ما الفرق بين التفكير التقليدي والتفكير التصميمي؟", options: ["التقليدي يركز على الحل، والتصميمي يركز على الإنسان", "لا يوجد فرق بينهما", "التقليدي أسرع دائماً"], correct: 0, explain: "التفكير التصميمي يبدأ من 'لماذا' و'لمن'، بينما التقليدي يبدأ بـ 'كيف نبيع'." },
+        { q: "أي من هذه الصفات هي الأهم لممارس التفكير التصميمي؟", options: ["القدرة على الرسم الاحترافي", "الفضول والقدرة على التعاطف مع الآخرين", "الصرامة في إصدار الأحكام"], correct: 1, explain: "العقلية المنفتحة والتعاطف هما المحرك الأساسي للابتكار." },
         { 
-            q: "سؤال التحدي: اكتشفتم أن القرارات التي تم اتخاذها في الاجتماع غير قابلة للتطبيق عملياً، ماذا تفعلون؟", 
-            options: ["تنفيذها بأي حال", "دعوة لاجتماع طارئ لتصحيح المسار", "تجاهل الموضوع"], 
+            q: "سؤال التحدي: شركة كبرى ترفض التغيير وتكتفي بنجاحاتها السابقة. كيف يساعدهم التفكير التصميمي؟", 
+            options: ["بإجبارهم على استخدام التكنولوجيا", "بخلق ثقافة تجربة الأفكار الصغيرة قبل الاعتماد الكلي", "بإغلاق الشركة وفتح واحدة جديدة"], 
             correct: 1, 
-            explain: "المرونة الإدارية تتطلب الاعتراف بالخطأ وتصحيحه قبل هدر الموارد في تنفيذ خاطئ." 
+            explain: "الابتكار يبدأ بكسر الجمود عبر النماذج الأولية والتعلم من السوق." 
         }
     ];
 
     let current = 0, score = 0;
-    const qText = document.getElementById('q-text'), qOptions = document.getElementById('q-options'),
+    const activation = document.getElementById('activation-screen'), quizBody = document.getElementById('quiz-body'),
+          qText = document.getElementById('q-text'), qOptions = document.getElementById('q-options'),
           feedback = document.getElementById('feedback'), nextBtn = document.getElementById('next-btn'),
-          prog = document.getElementById('progress'), badge = document.getElementById('tie-breaker-badge');
+          prog = document.getElementById('progress'), badge = document.getElementById('tie-breaker-badge'),
+          resultArea = document.getElementById('result-area');
+
+    function checkActivation() {
+        if(document.getElementById('pass-input').value === "1998") {
+            activation.style.display = 'none';
+            quizBody.style.display = 'block';
+            loadQuestion();
+        } else {
+            alert("أيها المتدربون، رمز التفعيل غير صحيح!");
+        }
+    }
 
     function loadQuestion() {
         const q = questions[current];
-        if(current === 10) badge.style.display = 'block'; else badge.style.display = 'none';
+        badge.style.display = (current === 10) ? 'block' : 'none';
         
         qText.innerText = `سيناريو ${current + 1}: ${q.q}`;
         qOptions.innerHTML = ''; feedback.style.display = 'none'; nextBtn.style.display = 'none';
@@ -141,8 +164,8 @@
         current++;
         if(current < questions.length) loadQuestion();
         else {
-            document.getElementById('quiz-body').style.display = 'none';
-            document.getElementById('result-area').style.display = 'block';
+            quizBody.style.display = 'none';
+            resultArea.style.display = 'block';
             document.getElementById('final-score').innerText = `النتيجة: ${score} من 11`;
             document.getElementById('whatsapp-btn').style.display = 'block';
             prog.style.width = '100%';
@@ -150,11 +173,12 @@
     };
 
     document.getElementById('whatsapp-btn').onclick = () => {
-        const msg = encodeURIComponent(`الأستاذ محمد طه، لقد أكملنا اختبار "إدارة الاجتماعات" بنجاح.\nالنتيجة: ${score} من 11.\nالمتدرب: [اكتب اسمك هنا] 🎓`);
+        const msg = encodeURIComponent(`الأستاذ محمد طه، لقد أتممنا اختبار "التفكير التصميمي" بنجاح.\nالنتيجة: ${score} من 11.\nالمتدرب: [اكتب اسمك هنا] 🎓`);
         window.open(`https://wa.me/249901946410?text=${msg}`);
     };
 
-    loadQuestion();
+    // حماية إضافية
+    document.onkeydown = (e) => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0))) return false; };
 </script>
 </body>
 </html>
