@@ -50,14 +50,11 @@
         .correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
         .wrong { background: #fff1f2; border-color: var(--danger); color: #991b1b; }
         
-        #next-btn, #whatsapp-btn, #start-btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-        #next-btn { background: var(--primary); color: white; }
-        #start-btn { background: var(--secondary); color: #000; }
+        #next-btn, #whatsapp-btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        #next-btn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(15, 23, 42, 0.3); }
         #whatsapp-btn { background: #25D366; color: white; display: none; }
         
-        #activation-screen { text-align: center; }
         #result-area { display: none; text-align: center; }
-        input { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 2px solid #ddd; text-align: center; font-size: 1.1em; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -68,15 +65,7 @@
 <div class="quiz-container">
     <div id="tie-breaker-badge" class="badge">🔥 تحدي خبراء التسويق والإدارة</div>
     
-    <div id="activation-screen">
-        <h1>التفكير التصميمي للابتكار</h1>
-        <div class="subtitle">ماجستير الإدارة المصغر - محمد طه عطا المنان 🎓</div>
-        <p>أيها المتدربون، يرجى إدخال رمز التفعيل (1998):</p>
-        <input type="password" id="pass-input" placeholder="****">
-        <button id="start-btn" onclick="checkActivation()">دخول الاختبار 🔓</button>
-    </div>
-
-    <div id="quiz-body" style="display: none;">
+    <div id="quiz-body">
         <h1>التفكير التصميمي للابتكار</h1>
         <div class="subtitle">محاكاة المواقع الإدارية - إعداد محمد طه 🎓</div>
         <div class="progress-bar"><div id="progress"></div></div>
@@ -115,21 +104,11 @@
     ];
 
     let current = 0, score = 0;
-    const activation = document.getElementById('activation-screen'), quizBody = document.getElementById('quiz-body'),
+    const quizBody = document.getElementById('quiz-body'),
           qText = document.getElementById('q-text'), qOptions = document.getElementById('q-options'),
           feedback = document.getElementById('feedback'), nextBtn = document.getElementById('next-btn'),
           prog = document.getElementById('progress'), badge = document.getElementById('tie-breaker-badge'),
           resultArea = document.getElementById('result-area');
-
-    function checkActivation() {
-        if(document.getElementById('pass-input').value === "1998") {
-            activation.style.display = 'none';
-            quizBody.style.display = 'block';
-            loadQuestion();
-        } else {
-            alert("أيها المتدربون، رمز التفعيل غير صحيح!");
-        }
-    }
 
     function loadQuestion() {
         const q = questions[current];
@@ -177,8 +156,10 @@
         window.open(`https://wa.me/249901946410?text=${msg}`);
     };
 
-    // حماية إضافية
     document.onkeydown = (e) => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0))) return false; };
+
+    // بدء الاختبار مباشرة
+    loadQuestion();
 </script>
 </body>
 </html>
