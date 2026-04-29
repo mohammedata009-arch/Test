@@ -2,122 +2,266 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اختبار الماجستير المصغر - الإدارة والتسويق</title>
     <style>
         :root {
             --primary: #2c3e50;
+            --secondary: #2980b9;
             --accent: #d4af37;
+            --dark: #2c3e50;
+            --light: #f4f7f6;
+            --white: #ffffff;
+            --wa-color: #25D366;
             --success: #27ae60;
+            --error: #e74c3c;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
+            margin: 0;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark);
+            padding: 10px;
         }
-        .quiz-container {
-            background: white;
+
+        #main-card {
+            background: var(--white);
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 8px solid var(--primary);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
         }
-        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .user-info { margin-bottom: 30px; display: flex; gap: 10px; }
-        input[type="text"] { padding: 10px; flex: 1; border: 1px solid #ddd; border-radius: 5px; }
-        .question { margin-bottom: 25px; padding: 15px; border-right: 4px solid var(--accent); background: #fcfcfc; }
-        .question p { font-weight: bold; margin-bottom: 10px; }
-        .options label { display: block; margin: 8px 0; cursor: pointer; transition: 0.2s; }
-        .options input { margin-left: 10px; }
-        .btn-submit {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
+
+        h1 { color: var(--primary); margin: 0; font-size: 1.5rem; border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 5px; }
+        .subtitle { color: #7f8c8d; margin: 10px 0 20px; font-size: 0.85rem; }
+
+        .progress-container { background: #eee; height: 8px; border-radius: 10px; margin-bottom: 20px; }
+        #progress-bar { background: var(--accent); width: 0%; height: 100%; border-radius: 10px; transition: width 0.4s; }
+
+        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; min-height: 50px; line-height: 1.5; }
+
+        .options-grid { display: grid; gap: 10px; }
+        .opt-btn {
+            padding: 14px;
+            border: 2px solid #ecf0f1;
+            border-radius: 12px;
+            background: var(--white);
             cursor: pointer;
-            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: right;
         }
-        .btn-submit:hover { background: #34495e; }
-        #resultArea { display: none; text-align: center; margin-top: 20px; padding: 20px; border: 2px dashed var(--success); }
+        .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: #fffdf5; }
+        
+        .correct { background: var(--success) !important; color: white; border-color: var(--success) !important; }
+        .wrong { background: var(--error) !important; color: white; border-color: var(--error) !important; }
+
+        #explanation-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fdfae8;
+            border-right: 5px solid var(--accent);
+            text-align: right;
+            font-size: 0.95rem;
+            animation: fadeIn 0.5s;
+        }
+
+        #result-screen { display: none; }
+        .score-circle { width: 90px; height: 90px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; margin: 0 auto 15px; color: white; }
+
+        .fee-info {
+            background: #f4f7f6;
+            color: var(--primary);
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin: 15px 0;
+            border: 1px dashed var(--primary);
+            font-size: 1rem;
+        }
+
+        input[type="text"] { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; text-align: center; font-size: 1rem; }
+
+        .btn-wa { background: var(--wa-color); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <h1>اختبار وحدة التسويق المتقدمة</h1>
-    
-    <div class="user-info">
-        <input type="text" id="userName" placeholder="أدخل اسم المتدرب الثلاثي..." required>
+<div id="main-card">
+    <div id="quiz-screen">
+        <h1>🎓 الإدارة والتسويق الحديث</h1>
+        <p class="subtitle">بإشراف الأستاذ محمد طه عطا المنان</p>
+        
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div id="question" class="question-text">تحميل الأسئلة...</div>
+        <div id="options" class="options-grid"></div>
+        <div id="explanation-box"></div>
     </div>
 
-    <form id="quizForm">
-        <div id="questionsLayer"></div>
-        <button type="button" class="btn-submit" onclick="calculateScore()">اعتماد الإجابات واستخراج النتيجة</button>
-    </form>
+    <div id="result-screen">
+        <div class="score-circle" id="final-score">0</div>
+        <h2 id="congrats-msg">أحسنتم يا متدربين!</h2>
+        <p>الرجاء إدخال اسمكم الثلاثي لاعتماد النتيجة</p>
+        
+        <input type="text" id="trainee-name" placeholder="الاسم الثلاثي للمتدرب">
+        
+        <div class="fee-info">
+            ✅ تم إنجاز وحدة التموضع والمزيج التسويقي
+        </div>
 
-    <div id="resultArea">
-        <h2 id="scoreText"></h2>
-        <p>اضغط على الزر أدناه لإرسال نتيجتك رسمياً إلى الإدارة:</p>
-        <button class="btn-submit" style="background: var(--success);" onclick="sendToWhatsApp()">إرسال النتيجة عبر WhatsApp</button>
+        <button class="btn-wa" onclick="sendWhatsApp()">
+            إرسال النتيجة عبر الواتساب
+        </button>
     </div>
 </div>
 
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
 <script>
-    const questions = [
-        { q: "التموضع الذهني هو ما تفعله للمنتج في المصنع.", a: "خطأ" },
-        { q: "أي من هذه الشركات تموضعت حول 'الأمان'؟", options: ["فيراري", "فولفو", "تويوتا"], a: "فولفو" },
-        { q: "العنصر الذي يولد الإيرادات في المزيج التسويقي هو السعر.", a: "صح" },
-        { q: "مزيج الخدمات يتكون من كم عنصر (P)؟", options: ["4", "5", "7"], a: "7" },
-        { q: "الأفراد (People) هم جزء من مزيج الخدمات فقط وليس المنتجات المادية.", a: "صح" },
-        { q: "الدليل المادي (Physical Evidence) يساعد في تقليل الشعور بالمخاطرة لدى عملاء الخدمات.", a: "صح" },
-        { q: "التحول من منظور الشركة إلى منظور العميل يحول المنتج (Product) إلى:", options: ["التكلفة", "القيمة للعميل", "الاتصال"], a: "القيمة للعميل" },
-        { q: "الخدمات تتسم بأنها قابلة للتخزين لفترات طويلة.", a: "خطأ" },
-        { q: "في التموضع الذهني، الهدف هو احتلال 'رف ذهني' في عقل العميل.", a: "صح" },
-        { q: "العمليات (Process) تعني تدفق الإجراءات لتقديم الخدمة.", a: "صح" }
+    const quizData = [
+        { 
+            q: "يا متدربين، ما هو المقصود بالتموضع الذهني (Positioning)؟", 
+            a: ["تغيير مكان المصنع", "احتلال مكانة مميزة في عقل العميل", "زيادة عدد الموظفين"], 
+            c: 1,
+            exp: "شرح: التموضع هو 'المعركة' التي تُخاض في عقل العميل ليكون اسمك التجاري هو الخيار الأول فور بروز الحاجة."
+        },
+        { 
+            q: "ما هو العنصر الوحيد في المزيج التسويقي التقليدي (4Ps) الذي يولد دخلاً؟", 
+            a: ["المنتج", "الترويج", "السعر"], 
+            c: 2,
+            exp: "شرح: جميع العناصر الأخرى تمثل تكاليف، بينما السعر هو الذي يحقق الإيرادات المباشرة للمنظمة."
+        },
+        { 
+            q: "لماذا نضيف 3 عناصر جديدة (الأفراد، العمليات، الدليل المادي) في تسويق الخدمات؟", 
+            a: ["لزيادة تعقيد التسويق", "بسبب طبيعة الخدمات غير الملموسة", "لأن أسعار الخدمات مرتفعة"], 
+            c: 1,
+            exp: "شرح: لأن الخدمة لا تُرى ولا تُلمس، نحتاج للأفراد والعمليات والدليل المادي لتعزيز ثقة العميل وإثبات الجودة."
+        },
+        { 
+            q: "أي من الشركات التالية تموضعت ذهنياً حول مفهوم 'الأمان'؟", 
+            a: ["فيراري", "تويوتا", "فولفو"], 
+            c: 2,
+            exp: "شرح: نجحت فولفو في زرع فكرة أن سيارتها هي الأكثر أماناً في العالم، وهذا هو جوهر التموضع الذهني."
+        },
+        { 
+            q: "في مزيج الخدمات، ماذا يمثل عنصر 'الدليل المادي' (Physical Evidence)؟", 
+            a: ["عقد البيع فقط", "تصميم المكان والشهادات والموقع الإلكتروني", "راتب الموظف"], 
+            c: 1,
+            exp: "شرح: الدليل المادي هو كل ما يلمسه أو يراه العميل ليعوض غياب ملموسية الخدمة (مثل نظافة القاعة التدريبية)."
+        },
+        { 
+            q: "ماذا تعني 'التلازمية' كخاصية من خصائص الخدمات؟", 
+            a: ["إنتاج الخدمة واستهلاكها في نفس الوقت", "إمكانية تخزين الخدمة", "تشابه جودة الخدمة دائماً"], 
+            c: 0,
+            exp: "شرح: الخدمة (مثل المحاضرة) تُنتج وتُستهلك في آن واحد، ولا يمكن فصل مقدم الخدمة عن الخدمة نفسها."
+        },
+        { 
+            q: "عند التحول من منظور الشركة (4Ps) إلى العميل (4Cs)، المنتج يقابله:", 
+            a: ["التكلفة", "القيمة للعميل", "الاتصال"], 
+            c: 1,
+            exp: "شرح: العميل لا يشتري 'منتجاً' بل يشتري 'قيمة' أو حلاً لمشكلة تواجهه."
+        },
+        { 
+            q: "ما هو الهدف من استخدام 'خرائط الإدراك' في التسويق؟", 
+            a: ["تحديد مواقع الفروع", "معرفة موقع العلامة التجارية مقابل المنافسين", "حساب أرباح السنة"], 
+            c: 1,
+            exp: "شرح: هي أداة بصرية توضح كيف يرى العملاء علامتك التجارية مقارنة بالمنافسين بناءً على السعر والجودة."
+        },
+        { 
+            q: "يا متدربين، أي عنصر في المزيج الخدمي يركز على 'سلوك الموظفين'؟", 
+            a: ["العمليات", "الأفراد", "التوزيع"], 
+            c: 1,
+            exp: "شرح: الأفراد (People) هم جوهر الخدمة، مهاراتهم وتعاملهم يحدد نجاح أو فشل التجربة التسويقية."
+        },
+        { 
+            q: "التموضع الذهني الناجح يجب أن يكون:", 
+            a: ["غامضاً وصعباً", "واضحاً، متميزاً، وذا مصداقية", "يتغير كل أسبوع"], 
+            c: 1,
+            exp: "شرح: الثبات والوضوح هما مفتاح استقرار الصورة الذهنية في عقول المتدربين والعملاء."
+        }
     ];
 
-    const qLayer = document.getElementById('questionsLayer');
-    questions.forEach((item, index) => {
-        let html = `<div class="question"><p>${index + 1}. ${item.q}</p><div class="options">`;
-        let opts = item.options ? item.options : ["صح", "خطأ"];
-        opts.forEach(opt => {
-            html += `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`;
-        });
-        html += `</div></div>`;
-        qLayer.innerHTML += html;
-    });
+    let current = 0;
+    let score = 0;
 
-    let finalScore = 0;
-    let name = "";
-
-    function calculateScore() {
-        name = document.getElementById('userName').value;
-        if(!name) { alert("يرجى كتابة اسمكم أولاً"); return; }
+    function renderQuestion() {
+        if (current >= quizData.length) { showResults(); return; }
         
-        finalScore = 0;
-        questions.forEach((item, index) => {
-            const selected = document.querySelector(`input[name="q${index}"]:checked`);
-            if(selected && selected.value === item.a) finalScore++;
+        const q = quizData[current];
+        document.getElementById("question").innerText = q.q;
+        document.getElementById("explanation-box").style.display = "none";
+        document.getElementById("progress-bar").style.width = ((current + 1) / quizData.length * 100) + "%";
+        
+        const optsDiv = document.getElementById("options");
+        optsDiv.innerHTML = "";
+        
+        q.a.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "opt-btn";
+            btn.innerText = opt;
+            btn.onclick = () => check(i, btn);
+            optsDiv.appendChild(btn);
         });
-
-        document.getElementById('scoreText').innerText = `أهلاً بك يا ${name}، درجتك هي: ${finalScore} من ${questions.length}`;
-        document.getElementById('resultArea').style.display = 'block';
-        window.scrollTo(0, document.body.scrollHeight);
     }
 
-    function sendToWhatsApp() {
-        const phone = "249901946410";
-        const message = `الاسم: ${name}%0Aالنتيجة: ${finalScore} من 10%0Aتم اجتياز اختبار التموضع والمزيج التسويقي بنجاح.`;
-        window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, '_blank');
+    function check(idx, btn) {
+        const correct = quizData[current].c;
+        const explanation = quizData[current].exp;
+        const allBtns = document.querySelectorAll(".opt-btn");
+        allBtns.forEach(b => b.disabled = true);
+
+        const expBox = document.getElementById("explanation-box");
+        expBox.innerText = explanation;
+        expBox.style.display = "block";
+
+        if (idx === correct) {
+            btn.classList.add("correct");
+            document.getElementById("sound-correct").play();
+            score++;
+        } else {
+            btn.classList.add("wrong");
+            allBtns[correct].classList.add("correct");
+            document.getElementById("sound-wrong").play();
+        }
+
+        setTimeout(() => {
+            current++;
+            renderQuestion();
+        }, 3500); 
     }
+
+    function showResults() {
+        document.getElementById("quiz-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("final-score").innerText = score + " / " + quizData.length;
+    }
+
+    function sendWhatsApp() {
+        const name = document.getElementById("trainee-name").value;
+        if (!name) { alert("من فضلك اكتب اسمك الثلاثي يا متدرب"); return; }
+        
+        const msg = encodeURIComponent(`السلام عليكم أستاذ محمد طه،\nأنا المتدرب: ${name}\nأتممت اختبار "التموضع والمزيج التسويقي" بنجاح.\nالنتيجة: ${score} من 10.`);
+        window.open(`https://wa.me/249901946410?text=${msg}`);
+    }
+
+    renderQuestion();
 </script>
 
 </body>
