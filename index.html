@@ -1,268 +1,558 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار الماجستير المصغر - الإدارة والتسويق</title>
+
+    <title>اختبار برنامج الماجستير المصغر في الترجمة واللغة الإنجليزية</title>
+
     <style>
+
         :root {
-            --primary: #2c3e50;
-            --secondary: #2980b9;
-            --accent: #d4af37;
-            --dark: #2c3e50;
-            --light: #f4f7f6;
+
+            --primary-blue: #273c75;
+            --accent-gold: #fbc531;
+            --success-green: #44bd32;
+            --error-red: #c23616;
             --white: #ffffff;
-            --wa-color: #25D366;
-            --success: #27ae60;
-            --error: #e74c3c;
+            --wa-green: #25D366;
+
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
+
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #192a56 0%, #273c75 100%);
             margin: 0;
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--dark);
-            padding: 10px;
+
         }
 
-        #main-card {
-            background: var(--white);
+        #main-container {
+
+            background: white;
             width: 100%;
-            max-width: 600px;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            max-width: 700px;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-top: 10px solid var(--accent-gold);
             text-align: center;
-            position: relative;
+
         }
 
-        h1 { color: var(--primary); margin: 0; font-size: 1.5rem; border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 5px; }
-        .subtitle { color: #7f8c8d; margin: 10px 0 20px; font-size: 0.85rem; }
+        .platform-name {
 
-        .progress-container { background: #eee; height: 8px; border-radius: 10px; margin-bottom: 20px; }
-        #progress-bar { background: var(--accent); width: 0%; height: 100%; border-radius: 10px; transition: width 0.4s; }
-
-        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; min-height: 50px; line-height: 1.5; }
-
-        .options-grid { display: grid; gap: 10px; }
-        .opt-btn {
+            background: linear-gradient(90deg, #273c75, #192a56);
+            color: white;
             padding: 14px;
-            border: 2px solid #ecf0f1;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+        }
+
+        h1 {
+
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+
+        }
+
+        .subtitle {
+
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-bottom: 25px;
+
+        }
+
+        .progress-bar-bg {
+
+            background: #dcdde1;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+
+        }
+
+        #progress-fill {
+
+            background: var(--accent-gold);
+            width: 0%;
+            height: 100%;
+            transition: width 0.4s ease;
+
+        }
+
+        .question-container {
+
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--primary-blue);
+            min-height: 70px;
+
+        }
+
+        .options-list {
+
+            display: grid;
+            gap: 12px;
+
+        }
+
+        .option-btn {
+
+            padding: 16px;
+            border: 2px solid #dcdde1;
             border-radius: 12px;
-            background: var(--white);
+            background: white;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: 600;
-            transition: 0.2s;
+            font-weight: bold;
             text-align: right;
-        }
-        .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: #fffdf5; }
-        
-        .correct { background: var(--success) !important; color: white; border-color: var(--success) !important; }
-        .wrong { background: var(--error) !important; color: white; border-color: var(--error) !important; }
+            transition: 0.3s;
+            color: var(--primary-blue);
 
-        #explanation-box {
+        }
+
+        .option-btn:hover:not(:disabled) {
+
+            background: #f5f6fa;
+            border-color: var(--primary-blue);
+
+        }
+
+        .is-correct {
+
+            background: var(--success-green) !important;
+            color: white !important;
+            border-color: var(--success-green) !important;
+
+        }
+
+        .is-wrong {
+
+            background: var(--error-red) !important;
+            color: white !important;
+            border-color: var(--error-red) !important;
+
+        }
+
+        #info-box {
+
             display: none;
-            margin-top: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f5f6fa;
+            border-right: 5px solid var(--primary-blue);
+            text-align: right;
+            line-height: 1.7;
+
+        }
+
+        #final-screen {
+
+            display: none;
+
+        }
+
+        .score-display {
+
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin: 20px 0;
+
+        }
+
+        input {
+
+            width: 100%;
             padding: 15px;
             border-radius: 10px;
-            background: #fdfae8;
-            border-right: 5px solid var(--accent);
-            text-align: right;
-            font-size: 0.95rem;
-            animation: fadeIn 0.5s;
-        }
-
-        #result-screen { display: none; }
-        .score-circle { width: 90px; height: 90px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; margin: 0 auto 15px; color: white; }
-
-        .fee-info {
-            background: #f4f7f6;
-            color: var(--primary);
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            margin: 15px 0;
-            border: 1px dashed var(--primary);
+            border: 2px solid #dcdde1;
+            margin-bottom: 20px;
             font-size: 1rem;
+            text-align: center;
+            box-sizing: border-box;
+
         }
 
-        input[type="text"] { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; text-align: center; font-size: 1rem; }
+        .whatsapp-link {
 
-        .btn-wa { background: var(--wa-color); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+            background: var(--wa-green);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+
+        .whatsapp-link:hover {
+
+            transform: translateY(-2px);
+            opacity: 0.95;
+
+        }
+
     </style>
+
 </head>
+
 <body>
 
-<div id="main-card">
-    <div id="quiz-screen">
-        <h1>🎓 الإدارة والتسويق الحديث</h1>
-        <p class="subtitle">بإشراف الأستاذ محمد طه عطا المنان</p>
-        
-        <div class="progress-container">
-            <div id="progress-bar"></div>
-        </div>
+<div id="main-container">
 
-        <div id="question" class="question-text">تحميل الأسئلة...</div>
-        <div id="options" class="options-grid"></div>
-        <div id="explanation-box"></div>
+    <div class="platform-name">
+
+        منصة البرامج التخصصية | إدارة محمد طه
+
     </div>
 
-    <div id="result-screen">
-        <div class="score-circle" id="final-score">0</div>
-        <h2 id="congrats-msg">أحسنتم يا متدربين!</h2>
-        <p>الرجاء إدخال اسمكم الثلاثي لاعتماد النتيجة</p>
-        
-        <input type="text" id="trainee-name" placeholder="الاسم الثلاثي للمتدرب">
-        
-        <div class="fee-info">
-            ✅ تم إنجاز وحدة التموضع والمزيج التسويقي
+    <div id="quiz-ui">
+
+        <h1>🎓 اختبار برنامج الماجستير المصغر في الترجمة واللغة الإنجليزية</h1>
+
+        <div class="subtitle">
+
+            المبالغة • نبرة النص • الاتساق والانسجام • التعديل والترجمة
+
         </div>
 
-        <button class="btn-wa" onclick="sendWhatsApp()">
-            إرسال النتيجة عبر الواتساب
+        <div class="progress-bar-bg">
+
+            <div id="progress-fill"></div>
+
+        </div>
+
+        <div id="question-text" class="question-container">
+
+            جاري تحميل الأسئلة...
+
+        </div>
+
+        <div id="options-box" class="options-list"></div>
+
+        <div id="info-box"></div>
+
+    </div>
+
+    <div id="final-screen">
+
+        <div class="score-display" id="total-score">0</div>
+
+        <h2>أحسنت 👏 لقد أكملت الاختبار بنجاح</h2>
+
+        <p>أدخل اسمك لإرسال النتيجة:</p>
+
+        <input type="text" id="user-name" placeholder="اكتب اسمك هنا">
+
+        <button class="whatsapp-link" onclick="handleWhatsApp()">
+
+            إرسال النتيجة عبر واتساب
+
         </button>
+
     </div>
+
 </div>
 
-<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
-<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+<audio id="successSound" preload="auto">
+
+    <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+
+</audio>
 
 <script>
-    const quizData = [
-        { 
-            q: "يا متدربين، ما هو المقصود بالتموضع الذهني (Positioning)؟", 
-            a: ["تغيير مكان المصنع", "احتلال مكانة مميزة في عقل العميل", "زيادة عدد الموظفين"], 
-            c: 1,
-            exp: "شرح: التموضع هو 'المعركة' التي تُخاض في عقل العميل ليكون اسمك التجاري هو الخيار الأول فور بروز الحاجة."
-        },
-        { 
-            q: "ما هو العنصر الوحيد في المزيج التسويقي التقليدي (4Ps) الذي يولد دخلاً؟", 
-            a: ["المنتج", "الترويج", "السعر"], 
-            c: 2,
-            exp: "شرح: جميع العناصر الأخرى تمثل تكاليف، بينما السعر هو الذي يحقق الإيرادات المباشرة للمنظمة."
-        },
-        { 
-            q: "لماذا نضيف 3 عناصر جديدة (الأفراد، العمليات، الدليل المادي) في تسويق الخدمات؟", 
-            a: ["لزيادة تعقيد التسويق", "بسبب طبيعة الخدمات غير الملموسة", "لأن أسعار الخدمات مرتفعة"], 
-            c: 1,
-            exp: "شرح: لأن الخدمة لا تُرى ولا تُلمس، نحتاج للأفراد والعمليات والدليل المادي لتعزيز ثقة العميل وإثبات الجودة."
-        },
-        { 
-            q: "أي من الشركات التالية تموضعت ذهنياً حول مفهوم 'الأمان'؟", 
-            a: ["فيراري", "تويوتا", "فولفو"], 
-            c: 2,
-            exp: "شرح: نجحت فولفو في زرع فكرة أن سيارتها هي الأكثر أماناً في العالم، وهذا هو جوهر التموضع الذهني."
-        },
-        { 
-            q: "في مزيج الخدمات، ماذا يمثل عنصر 'الدليل المادي' (Physical Evidence)؟", 
-            a: ["عقد البيع فقط", "تصميم المكان والشهادات والموقع الإلكتروني", "راتب الموظف"], 
-            c: 1,
-            exp: "شرح: الدليل المادي هو كل ما يلمسه أو يراه العميل ليعوض غياب ملموسية الخدمة (مثل نظافة القاعة التدريبية)."
-        },
-        { 
-            q: "ماذا تعني 'التلازمية' كخاصية من خصائص الخدمات؟", 
-            a: ["إنتاج الخدمة واستهلاكها في نفس الوقت", "إمكانية تخزين الخدمة", "تشابه جودة الخدمة دائماً"], 
-            c: 0,
-            exp: "شرح: الخدمة (مثل المحاضرة) تُنتج وتُستهلك في آن واحد، ولا يمكن فصل مقدم الخدمة عن الخدمة نفسها."
-        },
-        { 
-            q: "عند التحول من منظور الشركة (4Ps) إلى العميل (4Cs)، المنتج يقابله:", 
-            a: ["التكلفة", "القيمة للعميل", "الاتصال"], 
-            c: 1,
-            exp: "شرح: العميل لا يشتري 'منتجاً' بل يشتري 'قيمة' أو حلاً لمشكلة تواجهه."
-        },
-        { 
-            q: "ما هو الهدف من استخدام 'خرائط الإدراك' في التسويق؟", 
-            a: ["تحديد مواقع الفروع", "معرفة موقع العلامة التجارية مقابل المنافسين", "حساب أرباح السنة"], 
-            c: 1,
-            exp: "شرح: هي أداة بصرية توضح كيف يرى العملاء علامتك التجارية مقارنة بالمنافسين بناءً على السعر والجودة."
-        },
-        { 
-            q: "يا متدربين، أي عنصر في المزيج الخدمي يركز على 'سلوك الموظفين'؟", 
-            a: ["العمليات", "الأفراد", "التوزيع"], 
-            c: 1,
-            exp: "شرح: الأفراد (People) هم جوهر الخدمة، مهاراتهم وتعاملهم يحدد نجاح أو فشل التجربة التسويقية."
-        },
-        { 
-            q: "التموضع الذهني الناجح يجب أن يكون:", 
-            a: ["غامضاً وصعباً", "واضحاً، متميزاً، وذا مصداقية", "يتغير كل أسبوع"], 
-            c: 1,
-            exp: "شرح: الثبات والوضوح هما مفتاح استقرار الصورة الذهنية في عقول المتدربين والعملاء."
-        }
-    ];
 
-    let current = 0;
-    let score = 0;
+const questions = [
 
-    function renderQuestion() {
-        if (current >= quizData.length) { showResults(); return; }
-        
-        const q = quizData[current];
-        document.getElementById("question").innerText = q.q;
-        document.getElementById("explanation-box").style.display = "none";
-        document.getElementById("progress-bar").style.width = ((current + 1) / quizData.length * 100) + "%";
-        
-        const optsDiv = document.getElementById("options");
-        optsDiv.innerHTML = "";
-        
-        q.a.forEach((opt, i) => {
-            const btn = document.createElement("button");
-            btn.className = "opt-btn";
-            btn.innerText = opt;
-            btn.onclick = () => check(i, btn);
-            optsDiv.appendChild(btn);
-        });
+{
+    q: "ما المقصود بالمبالغة (Exaggeration) في الترجمة؟",
+    a: [
+        "حذف الكلمات غير المهمة",
+        "تضخيم المعنى لإحداث تأثير أقوى",
+        "ترجمة الأرقام فقط",
+        "تغيير لغة النص"
+    ],
+    c: 1,
+    exp: "شرح: المبالغة تستخدم لإبراز المعنى أو التأثير العاطفي في النص."
+},
+
+{
+    q: "صيغة التأكيد في اللغة الإنجليزية تستخدم من أجل:",
+    a: [
+        "إضعاف الرسالة",
+        "إظهار الشك",
+        "تعزيز المعنى والتأكيد عليه",
+        "تقليل وضوح النص"
+    ],
+    c: 2,
+    exp: "شرح: أدوات التأكيد تجعل الرسالة أكثر قوة ووضوحاً."
+},
+
+{
+    q: "ما المقصود بنبرة النص (Tone of Text)؟",
+    a: [
+        "لون الخط",
+        "أسلوب ومشاعر الكاتب داخل النص",
+        "عدد الكلمات",
+        "نوع الورق"
+    ],
+    c: 1,
+    exp: "شرح: النبرة تعكس موقف الكاتب ومشاعره تجاه الموضوع."
+},
+
+{
+    q: "ورشة تحليل الأخطاء تهدف إلى:",
+    a: [
+        "تكرار الأخطاء",
+        "تحسين جودة الترجمة واللغة",
+        "إلغاء المراجعة",
+        "تقليل فهم النص"
+    ],
+    c: 1,
+    exp: "شرح: تحليل الأخطاء يساعد على تطوير مهارات الترجمة والكتابة."
+},
+
+{
+    q: "عند ترجمة الأرقام والتواريخ يجب:",
+    a: [
+        "تغييرها عشوائياً",
+        "الحفاظ على دقتها وصيغتها المناسبة",
+        "حذفها",
+        "ترجمتها حرفياً دائماً"
+    ],
+    c: 1,
+    exp: "شرح: الأرقام والتواريخ تحتاج إلى دقة عالية أثناء الترجمة."
+},
+
+{
+    q: "الاتساق (Consistency) في الترجمة يعني:",
+    a: [
+        "استخدام مصطلحات موحدة طوال النص",
+        "تغيير المصطلحات باستمرار",
+        "إهمال المعاني",
+        "ترجمة نصف النص فقط"
+    ],
+    c: 0,
+    exp: "شرح: الاتساق يحافظ على وضوح النص واحترافيته."
+},
+
+{
+    q: "الانسجام (Coherence) في النص يعني:",
+    a: [
+        "ترتيب الأفكار بشكل مترابط",
+        "استخدام كلمات عشوائية",
+        "زيادة الأخطاء",
+        "إلغاء الفقرات"
+    ],
+    c: 0,
+    exp: "شرح: الانسجام يجعل النص مفهوماً وسهل القراءة."
+},
+
+{
+    q: "ما المقصود بالاقتراض (Borrowing) في الترجمة؟",
+    a: [
+        "حذف الكلمة الأجنبية",
+        "استخدام الكلمة الأجنبية كما هي داخل اللغة المنقول إليها",
+        "تغيير معنى الجملة",
+        "إضافة كلمات جديدة"
+    ],
+    c: 1,
+    exp: "شرح: الاقتراض يعني نقل المصطلح الأجنبي كما هو عند الحاجة."
+},
+
+{
+    q: "التعريب يهدف إلى:",
+    a: [
+        "إبقاء الكلمات الأجنبية دون تعديل",
+        "تحويل المصطلحات الأجنبية إلى صيغة عربية مناسبة",
+        "إلغاء المعنى",
+        "تقليل وضوح النص"
+    ],
+    c: 1,
+    exp: "شرح: التعريب يساعد على دمج المصطلحات داخل اللغة العربية."
+},
+
+{
+    q: "ما المقصود بالتعديل (Modulation) في الترجمة؟",
+    a: [
+        "نسخ النص حرفياً",
+        "تغيير زاوية التعبير مع الحفاظ على المعنى",
+        "حذف النص بالكامل",
+        "ترجمة كلمة بكلمة فقط"
+    ],
+    c: 1,
+    exp: "شرح: التعديل أسلوب ترجمي يغيّر طريقة التعبير لإيصال المعنى الطبيعي."
+}
+
+];
+
+let currentIdx = 0;
+
+let userScore = 0;
+
+const successSound = document.getElementById("successSound");
+
+function playSuccessSound() {
+
+    successSound.pause();
+
+    successSound.currentTime = 0;
+
+    const playPromise = successSound.play();
+
+    if (playPromise !== undefined) {
+
+        playPromise.then(() => {}).catch(() => {});
+
     }
 
-    function check(idx, btn) {
-        const correct = quizData[current].c;
-        const explanation = quizData[current].exp;
-        const allBtns = document.querySelectorAll(".opt-btn");
-        allBtns.forEach(b => b.disabled = true);
+}
 
-        const expBox = document.getElementById("explanation-box");
-        expBox.innerText = explanation;
-        expBox.style.display = "block";
+function displayQuestion() {
 
-        if (idx === correct) {
-            btn.classList.add("correct");
-            document.getElementById("sound-correct").play();
-            score++;
-        } else {
-            btn.classList.add("wrong");
-            allBtns[correct].classList.add("correct");
-            document.getElementById("sound-wrong").play();
-        }
+    if (currentIdx >= questions.length) {
 
-        setTimeout(() => {
-            current++;
-            renderQuestion();
-        }, 3500); 
+        showFinalResults();
+
+        return;
+
     }
 
-    function showResults() {
-        document.getElementById("quiz-screen").style.display = "none";
-        document.getElementById("result-screen").style.display = "block";
-        document.getElementById("final-score").innerText = score + " / " + quizData.length;
+    const currentQ = questions[currentIdx];
+
+    document.getElementById("question-text").innerText =
+        (currentIdx + 1) + ". " + currentQ.q;
+
+    document.getElementById("info-box").style.display = "none";
+
+    document.getElementById("progress-fill").style.width =
+        ((currentIdx + 1) / questions.length * 100) + "%";
+
+    const optionsBox = document.getElementById("options-box");
+
+    optionsBox.innerHTML = "";
+
+    currentQ.a.forEach((option, i) => {
+
+        const btn = document.createElement("button");
+
+        btn.className = "option-btn";
+
+        btn.innerText = option;
+
+        btn.onclick = () => validateSelection(i, btn);
+
+        optionsBox.appendChild(btn);
+
+    });
+
+}
+
+function validateSelection(selectedIdx, btn) {
+
+    const correctIdx = questions[currentIdx].c;
+
+    const allBtns = document.querySelectorAll(".option-btn");
+
+    allBtns.forEach(b => b.disabled = true);
+
+    const info = document.getElementById("info-box");
+
+    info.innerText = questions[currentIdx].exp;
+
+    info.style.display = "block";
+
+    if (selectedIdx === correctIdx) {
+
+        btn.classList.add("is-correct");
+
+        playSuccessSound();
+
+        userScore++;
+
+    } else {
+
+        btn.classList.add("is-wrong");
+
+        allBtns[correctIdx].classList.add("is-correct");
+
     }
 
-    function sendWhatsApp() {
-        const name = document.getElementById("trainee-name").value;
-        if (!name) { alert("من فضلك اكتب اسمك الثلاثي يا متدرب"); return; }
-        
-        const msg = encodeURIComponent(`السلام عليكم أستاذ محمد طه،\nأنا المتدرب: ${name}\nأتممت اختبار "التموضع والمزيج التسويقي" بنجاح.\nالنتيجة: ${score} من 10.`);
-        window.open(`https://wa.me/249901946410?text=${msg}`);
+    setTimeout(() => {
+
+        currentIdx++;
+
+        displayQuestion();
+
+    }, 3000);
+
+}
+
+function showFinalResults() {
+
+    document.getElementById("quiz-ui").style.display = "none";
+
+    document.getElementById("final-screen").style.display = "block";
+
+    document.getElementById("total-score").innerText =
+        userScore + " / " + questions.length;
+
+}
+
+function handleWhatsApp() {
+
+    const name = document.getElementById("user-name").value;
+
+    if (!name) {
+
+        alert("من فضلك اكتب اسمك.");
+
+        return;
+
     }
 
-    renderQuestion();
+    const message = encodeURIComponent(
+
+`مرحباً،
+لقد أكملت اختبار "برنامج الماجستير المصغر في الترجمة واللغة الإنجليزية".
+
+الاسم: ${name}
+
+النتيجة: ${userScore} من ${questions.length}`
+
+    );
+
+    window.open(`https://wa.me/249901946410?text=${message}`);
+
+}
+
+displayQuestion();
+
 </script>
 
 </body>
+
 </html>
